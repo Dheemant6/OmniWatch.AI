@@ -1,0 +1,55 @@
+# OmniWatch AI Backend
+
+The **OmniWatch AI Backend** is the core processing engine for the OmniWatch security scanning suite. It utilizes **FastAPI** to handle incoming VCS webhooks (GitHub, GitLab), and offloads computationally heavy tasks (such as Tree-Sitter AST extraction, CycloneDX SBOM generation, and Deep Semantic LLM evaluation) to an asynchronous **Celery** pipeline.
+
+## 🚀 Key Features
+
+* **Real-Time Hook Ingestion**: Catch PR and push events in real-time.
+* **Non-Blocking Architecture**: FastAPI handles web traffic and routing, while Celery manages long-running code abstraction and PyTorch NLP scanning in the background.
+* **Component Tracking**: Generates and parses local `spdx` or `cyclonedx` inventories to detect supply chain vulnerabilities.
+* **Modular DDD Setup**: Data models, APIs, Core settings, and domain-specific services are distinctly separated.
+
+## 🛠️ Requirements
+
+* Python 3.11+
+* Redis (used as the Celery Broker and Result Backend)
+* (Optional) PostgreSQL for production; defaults to SQLite for local active development.
+
+## 📦 Setup & Installation
+
+**1. Create a Python Virtual Environment**
+```bash
+python -m venv .venv
+# On Windows
+.\.venv\Scripts\activate
+# On Linux/MacOS
+source .venv/bin/activate
+```
+
+**2. Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+**3. Configure Environment Variables**
+Copy `.env.example` to `.env` and fill in necessary keys (like your GitHub PAT).
+```bash
+cp .env.example .env
+```
+
+## 🏃 Running the Application
+
+**Run the FastAPI Server**
+Starts the local development server at `http://127.0.0.1:8000`. You can test out endpoints using the built-in Swagger UI at `/docs`.
+```bash
+uvicorn app.main:app --reload
+```
+
+**Run the Celery Worker**
+In a separate terminal (with your virtual environment activated), start the background worker:
+```bash
+celery -A app.worker.celery_app worker --loglevel=info
+```
+
+## 📂 Architecture References
+For more detailed architecture decisions regarding how the Ingestion, Translation, AI pipeline, and API operate together, see the designated [`ARCHITECTURE.md`](ARCHITECTURE.md) blueprint.
