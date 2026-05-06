@@ -1,5 +1,7 @@
 # OmniWatch AI Backend
 
+OmniWatch AI is an automated, real-time security pipeline combining deep SCA with local AI Semantic Scanning (via Ollama) to catch zero-day threats. Going beyond simple alerts, it acts as an AI security engineer—generating secure, drop-in replacement patches directly inside your GitHub Pull Requests.
+
 The **OmniWatch AI Backend** is the core processing engine for the OmniWatch security scanning suite. It utilizes **FastAPI** to handle incoming VCS webhooks (GitHub, GitLab), and offloads computationally heavy tasks (such as Tree-Sitter AST extraction, CycloneDX SBOM generation, and Deep Semantic LLM evaluation) to an asynchronous **Celery** pipeline.
 
 ## 🚀 Key Features
