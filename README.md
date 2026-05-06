@@ -53,5 +53,22 @@ In a separate terminal (with your virtual environment activated), start the back
 celery -A app.worker.celery_app worker --loglevel=info
 ```
 
-## 📂 Architecture References
-For more detailed architecture decisions regarding how the Ingestion, Translation, AI pipeline, and API operate together, see the designated [`ARCHITECTURE.md`](ARCHITECTURE.md) blueprint.
+## 📂 Architecture & Current State
+
+Currently, the pipeline is fully operational with the following stack:
+* **API Layer**: FastAPI handling webhooks.
+* **Task Broker**: Redis & Celery managing asynchronous workflows.
+* **AI Engine**: Local Ollama (qwen2.5-coder:7b) performing semantic zero-day scanning.
+* **Database**: SQLite for local active development and testing.
+
+### 🔮 Future Enhancements (Roadmap)
+The foundational classes for the following are built, but full production integrations are planned as future enhancements:
+* **AWS S3 Integration**: For persistent, long-term storage of SBOMs and compliance artifacts.
+* **Managed Vector Databases**: Shifting local RAG components to cloud providers like Pinecone.
+* **Production Database**: Migrating from SQLite to PostgreSQL.
+
+## 🤝 Open for Contributions
+
+OmniWatch AI is an open-source project and we welcome contributions! Whether you want to help implement the future enhancements above, add support for new AI models, or improve the remediation engine, please feel free to open an issue or submit a Pull Request. 
+
+For more detailed architecture decisions regarding how the Ingestion, Translation, AI pipeline, and API operate together, see the designated [ARCHITECTURE.md](ARCHITECTURE.md) blueprint.
