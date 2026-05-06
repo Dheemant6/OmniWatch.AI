@@ -50,3 +50,16 @@ app.db
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Testing and local dev files
+tests/
+test_*.py
+temp_repo*/
+test_sbom_repo/
+*.log
+
+# Documentation and temporary scripts
+STARTUP_INSTRUCTIONS.txt
+TEST_INSTRUCTIONS.md
+GITHUB_E2E_TESTING.md
+reset_db.py

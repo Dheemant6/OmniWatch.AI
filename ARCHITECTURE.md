@@ -35,9 +35,10 @@ The backend acts as the core engine to process webhooks from CI/CD systems, perf
 - **Compliance Checking**: Performs license validation and records transitive dependencies.
 
 ### 2.4 AI Semantic Analysis Engine
-- **Frameworks**: `PyTorch` / `HuggingFace Transformers`.
-- **Purpose**: Instead of basic regex matching (which leads to false positives), uses fine-tuned LLMs and transformer models tailored for code sequences to deeply understand business logic, data flow, and cryptographic hygiene.
-- **Capabilities**: Detects Zero-Days, contextual logic flaws, and complex OWASP top 10 violations.
+- **Architecture**: A decoupled client-server model. The Celery worker acts as a client using the `AsyncOpenAI` SDK to query a dedicated high-throughput inference server (`Ollama`).
+- **Model**: `Qwen 2.5 Coder 7B` (via 4-bit quantization natively handled by Ollama/llama.cpp to fit within 6GB VRAM hardware limits).
+- **Purpose**: Instead of basic regex matching (which leads to false positives), uses state-of-the-art open-source LLMs tailored specifically for code comprehension. This deeply understands business logic, data flow, and cryptographic hygiene.
+- **Capabilities**: Detects Zero-Days, contextual logic flaws, and complex OWASP top 10 violations. Returns structured JSON containing vulnerabilities and proposed code patches.
 
 ### 2.5 Threat Intelligence & External Integrations
 - **Databases**: Synchronizes with OSV (Open Source Vulnerabilities), NVD, and GitHub Advisory Database.

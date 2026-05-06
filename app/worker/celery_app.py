@@ -9,12 +9,6 @@ backend_url = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/0"
 celery_app = Celery(
     "worker",
     broker=broker_url,
-    backend=backend_url
+    backend=backend_url,
+    include=["app.worker.tasks"]
 )
-
-celery_app.conf.task_routes = {
-    "app.worker.tasks.run_security_scan": "main-queue"
-}
-
-# Auto-discover tasks in all modules
-celery_app.autodiscover_tasks(["app.worker.tasks"])
