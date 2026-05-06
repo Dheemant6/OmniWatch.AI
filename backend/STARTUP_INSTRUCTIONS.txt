@@ -1,0 +1,73 @@
+===================================================
+  OMNIWATCH AI BACKEND - QUICK STARTUP GUIDE
+===================================================
+
+This guide covers how to spin up the OmniWatch backend locally after cloning the repository.
+You will need 4 separate terminal tabs to run the different microservices.
+
+PREREQUISITES:
+- Python 3.11+
+- Docker Desktop (Running)
+- Ollama (Installed locally)
+
+---------------------------------------------------
+STEP 1: Start the AI Engine (Ollama)
+---------------------------------------------------
+This hosts the local LLM used for semantic scanning.
+- Run:
+  ollama run qwen2.5-coder:7b
+
+---------------------------------------------------
+STEP 2: Start the Message Broker (Redis)
+---------------------------------------------------
+This handles the background job queues for Celery.
+- Run:
+  docker run -d -p 6379:6379 redis
+
+---------------------------------------------------
+STEP 3: Start the Core API (FastAPI)
+---------------------------------------------------
+This serves the API and receives incoming GitHub webhooks.
+- Navigate to the backend folder:
+  cd backend
+
+- Create and activate a virtual environment:
+  python -m venv .venv
+  source .venv/bin/activate  # (On Windows: .\.venv\Scripts\activate)
+
+- Install dependencies:
+  pip install -r requirements.txt
+
+- Configure environment:
+  cp .env.example .env
+  # (Make sure to fill in your API keys inside .env)
+
+- Start the server:
+  uvicorn app.main:app --reload
+
+---------------------------------------------------
+STEP 4: Start the Background Worker (Celery)
+---------------------------------------------------
+This performs the heavy SBOM generation and AI analysis.
+- Open a new terminal and navigate to the backend folder:
+  cd backend
+
+- Activate the environment:
+  source .venv/bin/activate  # (On Windows: .\.venv\Scripts\activate)
+
+- Start the worker:
+  # On Windows, use --pool=solo. On Mac/Linux, you can omit it.
+  celery -A app.worker.celery_app worker --pool=solo --loglevel=info
+
+---------------------------------------------------
+NEXT STEPS: GITHUB WEBHOOK INTEGRATION
+---------------------------------------------------
+To automatically scan repositories on push/PR:
+1. Expose your API via ngrok: `ngrok http 8000`
+2. Go to your target GitHub Repository > Settings > Webhooks > Add webhook.
+3. Payload URL: Paste the ngrok URL and append `/api/v1/webhooks/github`.
+4. Content type: `application/json`
+5. Secret: Enter `my-local-secret`
+6. In your backend `.env` file, ensure you have:
+   GITHUB_WEBHOOK_SECRET=my-local-secret
+   GITHUB_TOKEN=<your_personal_access_token>
