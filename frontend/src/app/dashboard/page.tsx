@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [status, setStatus] = useState<any>(null);
   const [tasks, setTasks] = useState<any[]>([]);
   const [insights, setInsights] = useState<any>(null);
-  const [logs, setLogs] = useState<string[]>([]);
+  const [pipelineLogs, setPipelineLogs] = useState<Record<string, string[]>>({ "Global System": [] });
   const [repoUrl, setRepoUrl] = useState<string>('');
   const [isTriggering, setIsTriggering] = useState<boolean>(false);
   const [expandedFindingIdx, setExpandedFindingIdx] = useState<number | null>(null);
@@ -332,8 +332,21 @@ export default function Dashboard() {
         
         ws.onmessage = (event) => {
             const line = event.data;
+            let targetPipeline = "Global System";
+            
+            const match = line.match(/\[PIPELINE_STAGE\]\s+\[(.*?)\]/);
+            if (match && match[1]) {
+                targetPipeline = match[1];
+            }
+            
             if (line.includes('[PIPELINE_STAGE]') || line.includes('[ERROR]')) {
-                setLogs(prev => [...prev, line].slice(-200));
+                setPipelineLogs(prev => {
+                    const currentLogs = prev[targetPipeline] || [];
+                    return {
+                        ...prev,
+                        [targetPipeline]: [...currentLogs, line].slice(-200)
+                    };
+                });
             }
         };
         
@@ -374,7 +387,7 @@ export default function Dashboard() {
     if (isAutoScroll && logEndRef.current) {
         logEndRef.current.scrollIntoView();
     }
-  }, [logs, isAutoScroll]);
+  }, [pipelineLogs, isAutoScroll]);
 
   const renderLogLine = (line: string, i: number) => {
       let colorClass = styles.logText;
@@ -477,10 +490,10 @@ export default function Dashboard() {
           <span style={{marginRight: '8px'}}>⚡</span> Active Tasks
         </div>
         <div 
-           className={`${styles.navItem} ${activeTab === 'Logs' ? styles.active : ''}`}
-           onClick={() => setActiveTab('Logs')}
+           className={`${styles.navItem} ${activeTab === 'Telemetry' ? styles.active : ''}`}
+           onClick={() => setActiveTab('Telemetry')}
         >
-          <span style={{marginRight: '8px'}}>📝</span> System Logs
+          <span style={{marginRight: '8px'}}>📡</span> Pipeline Telemetry
           <span style={{display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: wsRef.current?.readyState === 1 ? '#10b981' : '#f59e0b', marginLeft: '8px'}}></span>
         </div>
         <div 
@@ -610,21 +623,28 @@ export default function Dashboard() {
             </>
         )}
 
-        {activeTab === 'Logs' && (
-            <div className={`glass-panel`} style={{padding: '24px', marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, maxHeight: '600px'}}>
-                 <h2 className={styles.sectionTitle}>Live System Logs</h2>
-                 <div 
-                    ref={logsContainerRef}
-                    onScroll={handleScroll}
-                    className={styles.logViewerContainer} 
-                    style={{flex: 1, height: '400px', overflowY: 'auto', paddingRight: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)'}}
-                 >
-                    {logs.length === 0 ? (
-                        <p className={styles.logText}>Connected. Waiting for high-level pipeline logs...</p>
-                    ) : (
-                        logs.map((line, i) => renderLogLine(line, i))
-                    )}
-                    <div ref={logEndRef} />
+        {activeTab === 'Telemetry' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px', flex: 1, maxHeight: '800px' }}>
+                 <h2 className={styles.sectionTitle}>Pipeline Execution Telemetry</h2>
+                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '16px', overflowY: 'auto' }}>
+                    {Object.entries(pipelineLogs).map(([pipelineName, logs]) => (
+                        <div key={pipelineName} className={`glass-panel`} style={{padding: '16px', display: 'flex', flexDirection: 'column', height: '350px'}}>
+                            <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: 'var(--neon-cyan)', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
+                                📡 {pipelineName}
+                            </h3>
+                            <div 
+                                className={styles.logViewerContainer} 
+                                style={{flex: 1, overflowY: 'auto', paddingRight: '8px'}}
+                            >
+                                {logs.length === 0 ? (
+                                    <p className={styles.logText}>Waiting for telemetry...</p>
+                                ) : (
+                                    logs.map((line, i) => renderLogLine(line, i))
+                                )}
+                                <div ref={logEndRef} />
+                            </div>
+                        </div>
+                    ))}
                  </div>
             </div>
         )}
