@@ -1,0 +1,192 @@
+:root {
+  --bg-dark: #030014;
+  --text-main: #FFFFFF;
+  --text-muted: #a0a0b0;
+  --neon-purple: #B249F8;
+  --neon-blue: #4F46E5;
+  --neon-cyan: #06B6D4;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow-x: hidden;
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Animations & Glassmorphism */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.glass-panel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
+
+/* Scroll Animation Utilities */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+
+/* Glowing Orbs */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  -webkit-filter: blur(120px);
+  z-index: -1;
+  opacity: 0.4;
+  animation: float 12s infinite ease-in-out alternate;
+}
+
+.glow-orb.purple {
+  background: var(--neon-purple);
+  width: 500px;
+  height: 500px;
+  top: -150px;
+  left: -200px;
+}
+
+.glow-orb.cyan {
+  background: var(--neon-cyan);
+  width: 400px;
+  height: 400px;
+  bottom: -100px;
+  right: -100px;
+  animation-delay: -6s;
+}
+
+@keyframes float {
+  0% { transform: translateY(0) translateX(0) scale(1); }
+  100% { transform: translateY(40px) translateX(-40px) scale(1.1); }
+}
+
+/* Custom Gradients */
+.text-gradient {
+  background: linear-gradient(90deg, var(--text-main) 0%, var(--neon-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(90deg, var(--neon-purple) 0%, var(--neon-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
+  color: white;
+  padding: 16px 32px;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(178, 73, 248, 0.4);
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(178, 73, 248, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  display: inline-block;
+  background: transparent;
+  color: white;
+  padding: 16px 32px;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Layout Utilities classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Light Theme Overrides */
+:root[data-theme='light'] {
+  --bg-dark: #F3F4F6;
+  --text-main: #111827;
+  --text-muted: #4B5563;
+  --neon-purple: #7E22CE;
+  --neon-blue: #4338CA;
+  --neon-cyan: #0891B2;
+}
+
+:root[data-theme='light'] body {
+  background-color: var(--bg-dark);
+}
+
+:root[data-theme='light'] .glass-panel {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme='light'] .glass-panel:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme='light'] .btn-secondary {
+  color: var(--text-main);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme='light'] .btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme='light'] .pipelineFlow::before {
+  opacity: 0.8;
+}
+
+:root[data-theme='light'] .stepNumber {
+  background: #ffffff;
+}

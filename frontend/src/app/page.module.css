@@ -1,0 +1,236 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.navLinks {
+  display: flex;
+  gap: 32px;
+}
+
+.navLink {
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.navLink:hover {
+  color: var(--text-main);
+}
+
+.hero {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 60px 0;
+}
+
+.title {
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+  max-width: 900px;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin-bottom: 48px;
+  line-height: 1.6;
+}
+
+.ctaGroup {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.section {
+  padding: 100px 0;
+}
+
+.sectionTitle {
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 64px;
+  letter-spacing: -1px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.card {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cardIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: rgba(178, 73, 248, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neon-purple);
+  margin-bottom: 8px;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.cardDesc {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.pipelineFlow {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.pipelineFlow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 32px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--neon-purple), var(--neon-blue), transparent);
+  opacity: 0.3;
+}
+
+.pipelineStep {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.stepNumber {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bg-dark);
+  border: 2px solid var(--neon-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--neon-purple);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.stepContent {
+  padding-top: 12px;
+}
+
+.stepTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.stepDesc {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 40px 0;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.marqueeContainer {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background: rgba(178, 73, 248, 0.05);
+  padding: 20px 0;
+  border-top: 1px solid rgba(178, 73, 248, 0.15);
+  border-bottom: 1px solid rgba(178, 73, 248, 0.15);
+  margin-top: 60px;
+  position: relative;
+}
+
+.marqueeContent {
+  display: inline-block;
+  animation: scrollMarquee 40s linear infinite;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--neon-purple);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.marqueeContent span {
+  display: inline-flex;
+  align-items: center;
+  gap: 40px;
+  padding: 0 20px;
+}
+
+.marqueeContent span::after {
+  content: '•';
+  color: var(--neon-cyan);
+  font-size: 1.5rem;
+  line-height: 0;
+}
+
+.marqueeContent span:last-child::after {
+  content: none;
+}
+
+@keyframes scrollMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.themeToggle {
+  background: transparent;
+  border: 1px solid var(--text-muted);
+  color: var(--text-main);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.themeToggle:hover {
+  background: rgba(255,255,255,0.1);
+}
